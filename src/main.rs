@@ -22,10 +22,17 @@ impl Lentes {
     fn romper(self) {}
 }
 
-fn leer_menu_y_decidir<'menu, 'lentes>(menu: &'menu Menu, lentes: &'lentes Lentes) -> &'menu str {
-    match menu.platos.choose(&mut rand::rng()) {
-        Some(plato) => lentes.leer(plato),
-        None => "Aire,",
+struct Humano<'menu, 'lentes> {
+    lentes: &'lentes Lentes,
+    menu: &'menu Menu,
+}
+
+impl<'menu, 'lentes> Humano<'menu, 'lentes> {
+    fn leer_menu_y_decidir(&self) -> &'menu str {
+        match self.menu.platos.choose(&mut rand::rng()) {
+            Some(plato) => self.lentes.leer(plato),
+            None => "Aire,",
+        }
     }
 }
 
@@ -42,7 +49,13 @@ fn main() {
         ],
     };
 
-    let eleccion = leer_menu_y_decidir(&menu, &lentes);
+    let humano = Humano {
+        lentes: &lentes,
+        menu: &menu,
+    };
+
+    let eleccion = humano.leer_menu_y_decidir();
     lentes.romper();
+
     println!("Me gustaria pedir \"{}\", por favor", eleccion);
 }
