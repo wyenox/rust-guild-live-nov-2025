@@ -1,3 +1,5 @@
+//! From Slack conversation, with the implementation completed.
+
 struct StrSplit<'delimiter, 'document> {
     index: usize,
     delimiter: &'delimiter str,
