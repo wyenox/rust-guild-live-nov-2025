@@ -23,13 +23,14 @@ impl Lentes {
 }
 
 struct Humano<'menu, 'lentes> {
+    mambos_mentales: StdRng,
     lentes: &'lentes Lentes,
     menu: &'menu Menu,
 }
 
 impl<'menu, 'lentes> Humano<'menu, 'lentes> {
-    fn leer_menu_y_decidir(&self) -> &'menu str {
-        match self.menu.platos.choose(&mut rand::rng()) {
+    fn leer_menu_y_decidir(&mut self) -> &'menu str {
+        match self.menu.platos.choose(&mut self.mambos_mentales) {
             Some(plato) => self.lentes.leer(plato),
             None => "Aire,",
         }
@@ -49,7 +50,8 @@ fn main() {
         ],
     };
 
-    let humano = Humano {
+    let mut humano = Humano {
+        mambos_mentales: StdRng::from_os_rng(),
         lentes: &lentes,
         menu: &menu,
     };
